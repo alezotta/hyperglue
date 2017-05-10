@@ -5,6 +5,8 @@ var myColor;
 var distance=new Array();
 var latList= new Array(45.50416667,45.50388889,45.50388889,45.50388889,45.50361111,45.50361111,45.50305556,45.50305556,45.50305556,45.50305556);
 var lonList= new Array(9.16583333,9.16555556,9.16611111,9.16527778,9.16527778,9.16444444,9.16138889,9.16166667,9.16194444,9.16222222);
+var myLat;
+var myLon;
 
 function preload(){
     locationData = getCurrentPosition();
@@ -19,8 +21,8 @@ function setup() {
     print(locationData.heading);
     print(locationData.speed);*/
   
-  var myLat = locationData.latitude;
-  var myLon = locationData.longitude;
+  myLat = locationData.latitude;
+  myLon = locationData.longitude;
   
   
  /*  watchOptions = {
@@ -67,8 +69,11 @@ function draw() {
   noStroke();
   fill(255);
   textSize(16);
-  text(myMessage,10,60);
+  /*text(myMessage,10,60);*/
+  text("Hello",10,60);
   text("distance from closest sticker: " + min(distance), 10, 120);
+  text("my latitude: " + myLat, 10, 160);
+  text("my longitude: " + myLon, 10, 180);
   push();
   fill(255);
   ellipse(200,400,locationData.accuracy*3,locationData.accuracy*3);
