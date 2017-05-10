@@ -5,8 +5,8 @@ var myColor="";
 var distance=new Array();
 var myLat;
 var myLon;
-var latList=[45.4870793,45.50388889,45.50361111];
-var lonList=[9.1617638,9.16555556,9.16444444];
+var latList=[45.50388889,45.50361111];
+var lonList=[9.16555556,9.16444444];
 var stickerLat;
 var stickerLon;
 
