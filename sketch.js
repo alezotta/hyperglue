@@ -1,14 +1,10 @@
 var locationData;
 var fence;
 var message="Hello";
-var myColor="";
+var myColor;
 var distance=new Array();
-var myLat;
-var myLon;
 var latList= new Array(45.50416667,45.50388889,45.50388889,45.50388889,45.50361111,45.50361111,45.50305556,45.50305556,45.50305556,45.50305556);
 var lonList= new Array(9.16583333,9.16555556,9.16611111,9.16527778,9.16527778,9.16444444,9.16138889,9.16166667,9.16194444,9.16222222);
-var stickerLat;
-var stickerLon;
 
 function preload(){
     locationData = getCurrentPosition();
@@ -17,14 +13,14 @@ function preload(){
 function setup() {
   createCanvas(400,600);
   
-    print(locationData.latitude);
+   /* print(locationData.latitude);
     print(locationData.longitude);
     print(locationData.accuracy);
     print(locationData.heading);
-    print(locationData.speed);
+    print(locationData.speed);*/
   
-  myLat = locationData.latitude;
-  myLon = locationData.longitude;
+  var myLat = locationData.latitude;
+  var myLon = locationData.longitude;
   
   
  /*  watchOptions = {
