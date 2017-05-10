@@ -1,5 +1,4 @@
 var locationData;
-var fence;
 var myMessage="Hello";
 var myColor;
 var distance=new Array();
@@ -7,6 +6,8 @@ var latList= new Array(45.50416667,45.50388889,45.50388889,45.50388889,45.503611
 var lonList= new Array(9.16583333,9.16555556,9.16611111,9.16527778,9.16527778,9.16444444,9.16138889,9.16166667,9.16194444,9.16222222);
 var myLat;
 var myLon;
+var i=0;
+var accuracy=0;
 
 function preload(){
     locationData = getCurrentPosition();
@@ -19,13 +20,27 @@ function setup() {
     print(locationData.longitude);
     print(locationData.accuracy);
     print(locationData.heading);
-    print(locationData.speed);*/
+    print(locationData.speed); */
   
+    myLat = locationData.latitude;
+    myLon = locationData.longitude;
+    accuracy = locationData.accuracy;
+  
+  //aggiorna mia posizione ogni TOT secondi
   intervalCurrentPosition(positionPing, 5000);
-  
-  myLat = locationData.latitude;
-  myLon = locationData.longitude;
-  
+
+}
+
+function positionPing(position){
+    print("lat: " + position.latitude);
+    print("long: " + position.longitude);
+    print("accuracy: " + position.accuracy);
+    
+    i++;
+    
+    myLat = position.latitude;
+    myLon = position.longitude;
+    accuracy = position.accuracy;
   
     for(var index=0; index<latList.length; index++) {
     
@@ -37,13 +52,9 @@ function setup() {
       console.log("Distance from sticker " + index + ": " + distance[index] + " km")
       
     }
+    
 }
 
-
-function positionPing(position){
-    print("lat: " + locationData.latitude);
-    print("long: " + locationData.longitude);
-}
 
 function draw() {
   
@@ -52,9 +63,10 @@ function draw() {
   //azzurro #00aad1
   //rosso #ff006e
   
-  myColor= lerpColor(color("#00aad1"),color("#ff006e"),min(distance)%0.5/0.5);
+  myColor= lerpColor(color("#00aad1"),color("#ff006e"),min(distance)*2);
   
   background(myColor);
+  
   noStroke();
   fill(255);
   textSize(16);
@@ -63,6 +75,9 @@ function draw() {
   text("distance from closest sticker: " + min(distance), 10, 120);
   text("my latitude: " + myLat, 10, 160);
   text("my longitude: " + myLon, 10, 180);
+  
+  text("refresh: " + i, 10, 200);
+  
   push();
   fill("#00aad1");
   rect(0,250,50,50);
@@ -71,12 +86,12 @@ function draw() {
   pop();
   push();
   fill(255);
-  ellipse(200,400,locationData.accuracy*3,locationData.accuracy*3);
+  ellipse(200,400,accuracy*3,accuracy*3);
   pop();
   push();
   fill(0);
   textAlign(CENTER);
-  text(locationData.accuracy,200,400);
+  text(accuracy,200,400);
   pop();
 }
 
