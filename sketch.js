@@ -5,8 +5,8 @@ var myColor="";
 var distance=new Array();
 var myLat;
 var myLon;
-var latList=[45.50388889,45.50361111];
-var lonList=[9.16555556,9.16444444];
+var latList= new Array(45.50416667,45.50388889,45.50388889,45.50388889,45.50361111,45.50361111,45.50305556,45.50305556,45.50305556,45.50305556);
+var lonList= new Array(9.16583333,9.16555556,9.16611111,9.16527778,9.16527778,9.16444444,9.16138889,9.16166667,9.16194444,9.16222222);
 var stickerLat;
 var stickerLon;
 
@@ -29,21 +29,12 @@ function setup() {
   
    watchOptions = {
      enableHighAccuracy: true,
-     timeout: 3000,
+     timeout: 5000,
      maximumAge: 0
  };
+ 
     watchPosition(positionChanged, watchOptions);
   
-  
-/*      fenceOptions = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0
-      };
-  
-fence = new geoFenceCircle(stickerLat[0], stickerLon[0], 0.01, insideTheFence, outsideTheFence, 'km', fenceOptions);
-*/
-
     for(var index=0; index<latList.length; index++) {
       
       /*stickerLat = latList[index];
@@ -67,17 +58,6 @@ function positionChanged(position){
     
 }
 
-/*function insideTheFence(position){
-    myColor="#00FF00";
-    message="user is inside of the fence";
-}
-
-function outsideTheFence(position){
-    myColor="#FF0000";
-    message="user is outside of the fence";
-}*/
-
-
 function draw() {
   
   colorMode(HSB);
@@ -85,16 +65,14 @@ function draw() {
   //azzurro #00aad1
   //rosso #ff006e
   
-  myColor= lerpColor(color("#00aad1"),color("#ff006e"),distance[0]%0.5/0.5);
+  myColor= lerpColor(color("#00aad1"),color("#ff006e"),min(distance)%0.5/0.5);
   
   background(myColor);
   noStroke();
   fill(255);
   textSize(16);
   text(message,10,60);
-  text("distance from sticker: " + distance, 10, 120);
-  fill("#00aad1");
-  rect(100,200,100,100);
+  text("distance from closest sticker: " + min(distance), 10, 120);
   push();
   fill(255);
   ellipse(200,400,locationData.accuracy*3,locationData.accuracy*3);
