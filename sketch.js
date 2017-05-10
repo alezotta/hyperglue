@@ -27,13 +27,13 @@ function setup() {
   myLon = locationData.longitude;
   
   
-   watchOptions = {
+ /*  watchOptions = {
      enableHighAccuracy: true,
      timeout: 5000,
      maximumAge: 0
  };
  
-    watchPosition(positionChanged, watchOptions);
+    watchPosition(positionChanged, watchOptions);*/
   
     for(var index=0; index<latList.length; index++) {
       
@@ -51,12 +51,12 @@ function setup() {
     }
 }
 
-function positionChanged(position){
+/*function positionChanged(position){
     print("lat: " + position.latitude);
     print("long: " + position.longitude);
     
     
-}
+}*/
 
 function draw() {
   
