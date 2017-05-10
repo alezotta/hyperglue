@@ -1,6 +1,6 @@
 var locationData;
 var fence;
-var message="Hello";
+var myMessage="Hello";
 var myColor;
 var distance=new Array();
 var latList= new Array(45.50416667,45.50388889,45.50388889,45.50388889,45.50361111,45.50361111,45.50305556,45.50305556,45.50305556,45.50305556);
@@ -67,7 +67,7 @@ function draw() {
   noStroke();
   fill(255);
   textSize(16);
-  text(message,10,60);
+  text(myMessage,10,60);
   text("distance from closest sticker: " + min(distance), 10, 120);
   push();
   fill(255);
