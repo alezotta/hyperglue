@@ -21,24 +21,14 @@ function setup() {
     print(locationData.heading);
     print(locationData.speed);*/
   
+  intervalCurrentPosition(positionPing, 5000);
+  
   myLat = locationData.latitude;
   myLon = locationData.longitude;
   
   
- /*  watchOptions = {
-     enableHighAccuracy: true,
-     timeout: 5000,
-     maximumAge: 0
- };
- 
-    watchPosition(positionChanged, watchOptions);*/
-  
     for(var index=0; index<latList.length; index++) {
-      
-      /*stickerLat = latList[index];
-      stickerLon = lonList[index];*/
-      
-      
+    
       //calcola distanza tra due punti, restituisce valore distanza
       distance[index] = calcGeoDistance(latList[index], lonList[index], myLat, myLon, 'km');
     	
@@ -49,12 +39,11 @@ function setup() {
     }
 }
 
-/*function positionChanged(position){
-    print("lat: " + position.latitude);
-    print("long: " + position.longitude);
-    
-    
-}*/
+
+function positionPing(position){
+    print("lat: " + locationData.latitude);
+    print("long: " + locationData.longitude);
+}
 
 function draw() {
   
@@ -74,6 +63,12 @@ function draw() {
   text("distance from closest sticker: " + min(distance), 10, 120);
   text("my latitude: " + myLat, 10, 160);
   text("my longitude: " + myLon, 10, 180);
+  push();
+  fill("#00aad1");
+  rect(0,250,50,50);
+  fill("#ff006e");
+  rect(350,250,50,50);
+  pop();
   push();
   fill(255);
   ellipse(200,400,locationData.accuracy*3,locationData.accuracy*3);
