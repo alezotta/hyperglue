@@ -1,0 +1,26 @@
+[
+	{
+		"name": "Belize",
+		"lat": "45.503888889999999",
+		"lon": "9.1661111099999992",
+		"track": "./assets/tracks/Belize.mp3",
+		"stickerImage": "./assets/stickers/Belize.png",
+		"myVolume": "0.05"
+	},
+	{
+		"name": "Polarbeers",
+		"lat": "45.503611110000001",
+		"lon": "9.1644444400000005",
+		"track": "./assets/tracks/Polarbeers.mp3",
+		"stickerImage": "./assets/stickers/polarbeers.png",
+		"myVolume": "0.05"
+	},
+	{
+		"name": "Coral Mambo",
+		"lat": "45.50305556",
+		"lon": "9.1613888899999996",
+		"track": "./assets/tracks/CoralMambo.mp3",
+		"stickerImage": "./assets/stickers/coral_mambo.png",
+		"myVolume": "0.05"
+	}
+]

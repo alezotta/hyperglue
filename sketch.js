@@ -1,24 +1,29 @@
 var locationData;
-var myMessage="Hyperglue testing environment";
+var myMessage = "Hyperglue testing environment";
 var myColor;
-var distance=new Array();
-var latList= new Array(45.50416667,45.50388889,45.50388889,45.50388889,45.50361111,45.50361111,45.50305556,45.50305556,45.50305556,45.50305556);
-var lonList= new Array(9.16583333,9.16555556,9.16611111,9.16527778,9.16527778,9.16444444,9.16138889,9.16166667,9.16194444,9.16222222);
+var distance = new Array();
+//var latList = new Array(45.50416667,45.50388889,45.50388889,45.50388889,45.50361111,45.50361111,45.50305556,45.50305556,45.50305556,45.50305556);
+//var lonList = new Array(9.16583333,9.16555556,9.16611111,9.16527778,9.16527778,9.16444444,9.16138889,9.16166667,9.16194444,9.16222222);
 var myLat;
 var myLon;
-var i=0;
-var accuracy=0;
-//var stickerJSON = './assets/stickerJSON.json';
-//var stickerData = new Array();
+var i = 0;
+var accuracy = 0;
+var stickerJSON = './assets/stickerJSON.json';
+var stickerData = new Array();
 
+var mySong;
 var mySound;
 var analyzer;
+
+var myVolume = 0;
+
+var stickerAmount;
 
 /*= [
   {
     name : 'giovanni',
     track: './assets/track-di-giovanni.mp3',
-    stickerImage: '.assets/eccetera',
+    stickerImage: './assets/eccetera.jpg',
     latitude: 45,
     longitude: 9
   },
@@ -43,29 +48,48 @@ var analyzer;
 function preload(){
     //import initial location data
     locationData = getCurrentPosition();
+    
+    //import all data
+    stickerData = loadJSON(stickerJSON);
+    
+    console.log(stickerData);
+    
+    //import music track 1
+    mySound = loadSound('./assets/tracks/Polarbeers.mp3');
+    
+    //import music track 1
+    //mySound = loadSound(stickerData[1].track);
+    
     //import tracks
-    mySong= loadSound('./assets/tracks/CoralMambo.mp3');
+    /*for(var indexTrack = 0; indexTrack<stickerAmount; indexTrack++){
+      //load all tracks 
+      mySound = loadSound(stickerData[indexTrack].track);
+    }*/
     
-    
-    //import sticker data
-    //stickerData = loadJSON(stickerJSON);
+    //mySound = loadSound(stickerData[1].track);
     
 }
 
 function setup() {
   createCanvas(400,600);
   
-  mySong.setVolume(0.5);
-  mySong.play();
-  
-  analyzer=new p5.Amplitude();
-  analyzer.setInput(mySong);
+  //measures the number of stickers in the array
+    stickerAmount = Object.keys(stickerData).length;
+    
   
   
-  
-  
-  
-  
+  //play all tracks
+    /*for(var indexPlay = 0; indexPlay<stickerAmount; indexPlay++){
+      mySound[indexPlay].play();
+    }*/
+    
+    myVolume = 0.05;
+    
+    mySound.play();
+
+  //magic code for sound
+  /*analyzer=new p5.Amplitude();
+  analyzer.setInput(mySound);*/
   
   //available properties of location data
    /* print(locationData.latitude);
@@ -81,14 +105,13 @@ function setup() {
   
   //update my location data every 5 seconds
   intervalCurrentPosition(positionPing, 5000);
-
 }
 
 function positionPing(position){
     //show in console these location properties
-    print("lat: " + position.latitude);
+    /*print("lat: " + position.latitude);
     print("long: " + position.longitude);
-    print("accuracy: " + position.accuracy);
+    print("accuracy: " + position.accuracy);*/
     
     //for each array object, get these properties
     //stickersData[2].latitude
@@ -99,27 +122,38 @@ function positionPing(position){
     myLon = position.longitude;
     accuracy = position.accuracy;
   
-    for(var index=0; index<latList.length; index++) {
+    console.log("Latitude of Sticker 1" + ": " + stickerData[0].lat);
+    console.log("Dimensione dell'array POSITIONPING: " + stickerAmount);
+  
+    for(var index=0; index<stickerAmount; index++) {
     
       //calcola distanza tra due punti, restituisce valore distanza
-      distance[index] = calcGeoDistance(latList[index], lonList[index], myLat, myLon, 'km');
+      distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, myLat, myLon, 'km');
     	
-    	console.log("Latitude of Sticker " + index + ": " + latList[index]);
-    	console.log("Longitude of Sticker " + index + ": " + lonList[index]);
-      console.log("Distance from sticker " + index + ": " + distance[index] + " km")
+    	//check the calculation of distances of my current position from all locations
+    	console.log("Latitude of Sticker " + index + ": " + stickerData[index].lat);
+    	console.log("Longitude of Sticker " + index + ": " + stickerData[index].lon);
+      console.log("Distance from sticker " + index + ": " + distance[index] + " km");
       
+      if(min(distance)<0.02){
+        //set volume of track[index] based on distance
+        myVolume = 1-(min(distance)*50);
+      }else{
+        //imposta volume al minimo
+        myVolume = 0.05;
+      }
     }
-    
 }
 
 
 function draw() {
+ 
+ 
+  mySound.setVolume(myVolume);
   
-  var myVolume = analyzer.getLevel();
-  
-  
-  
-  console.log("my volume: " + myVolume)
+  /*console.log("Il volume " + stickerData[0].name + " è : " + stickerData[0].myVolume);
+  console.log("Il volume " + stickerData[1].name + " è : " + stickerData[1].myVolume);
+  console.log("Il volume " + stickerData[2].name + " è : " + stickerData[2].myVolume);*/
   
   colorMode(HSB);
 
@@ -135,13 +169,14 @@ function draw() {
   noStroke();
   fill(255);
   textSize(16);
-  /*text(myMessage,10,60);*/
   text(myMessage,10,60);
   text("Distance from closest sticker: " + floor(closestDistance*1000) + " metri", 10, 120);
   text("My latitude: " + myLat, 10, 160);
   text("My longitude: " + myLon, 10, 180);
   
   text("Refresh: " + i, 10, 200);
+  
+  text("Volume: " + myVolume, 10, 220);
   
   push();
   fill("#fe3031");
