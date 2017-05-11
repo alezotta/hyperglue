@@ -42,9 +42,6 @@ var stickerAmount;
   }
 ]*/
 
-
-
-
 function preload(){
     //import initial location data
     locationData = getCurrentPosition();
@@ -52,18 +49,13 @@ function preload(){
     //import all data
     stickerData = loadJSON(stickerJSON);
     
-    console.log(stickerData);
-    
     //import music track 1
     mySound = loadSound('./assets/tracks/Polarbeers.mp3');
     
-    //import music track 1
-    //mySound = loadSound(stickerData[1].track);
-    
-    //import tracks
-    /*for(var indexTrack = 0; indexTrack<stickerAmount; indexTrack++){
-      //load all tracks 
-      mySound = loadSound(stickerData[indexTrack].track);
+    //import all tracks
+    /*for(var indexTrack = 0; indexTrack<stickerData.length; indexTrack++){
+          //load all tracks 
+          mySound = loadSound(stickerData[indexTrack].track);
     }*/
     
     //mySound = loadSound(stickerData[1].track);
@@ -122,9 +114,6 @@ function positionPing(position){
     myLon = position.longitude;
     accuracy = position.accuracy;
   
-    console.log("Latitude of Sticker 1" + ": " + stickerData[0].lat);
-    console.log("Dimensione dell'array POSITIONPING: " + stickerAmount);
-  
     for(var index=0; index<stickerAmount; index++) {
     
       //calcola distanza tra due punti, restituisce valore distanza
@@ -135,8 +124,10 @@ function positionPing(position){
     	console.log("Longitude of Sticker " + index + ": " + stickerData[index].lon);
       console.log("Distance from sticker " + index + ": " + distance[index] + " km");
       
+      //check if there is a sticker in the range of 20 m
       if(min(distance)<0.02){
         //set volume of track[index] based on distance
+        //0.02*50=1
         myVolume = 1-(min(distance)*50);
       }else{
         //imposta volume al minimo
@@ -145,9 +136,7 @@ function positionPing(position){
     }
 }
 
-
 function draw() {
- 
  
   mySound.setVolume(myVolume);
   
@@ -162,8 +151,11 @@ function draw() {
   
   var closestDistance = min(distance);
   
+  //find color inside given spectrum based on distance of closest sticker
+  //0.02*50=1
   myColor= lerpColor(color("#fe3031"),color("#4e33fd"),closestDistance*50);
   
+  //interface
   background(myColor);
   
   noStroke();
@@ -176,7 +168,7 @@ function draw() {
   
   text("Refresh: " + i, 10, 200);
   
-  text("Volume: " + myVolume, 10, 220);
+  text("Volume: " + floor(myVolume)*100 + " %", 10, 220);
   
   push();
   fill("#fe3031");
@@ -189,12 +181,15 @@ function draw() {
   
   push();
   fill(255);
-  ellipse(200,450,accuracy*2,accuracy*2);
+  rectMode(CENTER);
+  rect(200,450,accuracy,20);
   pop();
   
   push();
-  fill(0);
+  fill(255);
   textAlign(CENTER);
+  text("Accuracy of signal",200,430);
+  fill('#4e33fd');
   text(accuracy,200,455);
   pop();
   
@@ -202,4 +197,3 @@ function draw() {
   text("10 m", 180, 280);
   text("20 m", 350, 280);
 }
-
