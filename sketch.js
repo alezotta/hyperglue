@@ -55,9 +55,8 @@ function preload(){
 function setup() {
   createCanvas(400,600);
   
-  mySong.setVolume(0);
+  mySong.setVolume(0.5);
   mySong.play();
-  mySong.loop();
   
   analyzer=new p5.Amplitude();
   analyzer.setInput(mySong);
