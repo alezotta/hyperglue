@@ -8,33 +8,75 @@ var myLat;
 var myLon;
 var i=0;
 var accuracy=0;
+//var stickerJSON = './assets/stickerJSON.json';
+//var stickerData = new Array();
+
+
+/*= [
+  {
+    name : 'giovanni',
+    track: './assets/track-di-giovanni.mp3',
+    stickerImage: '.assets/eccetera',
+    latitude: 45,
+    longitude: 9
+  },
+  {
+    name : 'giovanni',
+    track: './assets/track-di-giovanni.mp3',
+    stickerImage: '.assets/eccetera',
+    latitude: 45,
+    longitude: 9
+  },{
+    name : 'giovanni',
+    track: './assets/track-di-giovanni.mp3',
+    stickerImage: '.assets/eccetera',
+    latitude: 45,
+    longitude: 9
+  }
+]*/
+
+
+
 
 function preload(){
+    //import initial location data
     locationData = getCurrentPosition();
+    
+    
+    
+    //import sticker data
+    //stickerData = loadJSON(stickerJSON);
+    
 }
 
 function setup() {
   createCanvas(400,600);
   
+  //available properties of location data
    /* print(locationData.latitude);
     print(locationData.longitude);
     print(locationData.accuracy);
     print(locationData.heading);
     print(locationData.speed); */
-  
+    
+    //set initial location data
     myLat = locationData.latitude;
     myLon = locationData.longitude;
     accuracy = locationData.accuracy;
   
-  //aggiorna mia posizione ogni TOT secondi
+  //update my location data every 5 seconds
   intervalCurrentPosition(positionPing, 5000);
 
 }
 
 function positionPing(position){
+    //show in console these location properties
     print("lat: " + position.latitude);
     print("long: " + position.longitude);
     print("accuracy: " + position.accuracy);
+    
+    //for each array object, get these properties
+    //stickersData[2].latitude
     
     i++;
     
@@ -60,10 +102,12 @@ function draw() {
   
   colorMode(HSB);
 
-  //azzurro #00aad1
-  //rosso #ff006e
+  //azzurro #4e33fd
+  //rosso #fe3031
   
-  myColor= lerpColor(color("#00aad1"),color("#ff006e"),min(distance)*2);
+  var closestDistance = min(distance);
+  
+  myColor= lerpColor(color("#fe3031"),color("#4e33fd"),closestDistance*50);
   
   background(myColor);
   
@@ -72,26 +116,34 @@ function draw() {
   textSize(16);
   /*text(myMessage,10,60);*/
   text("Hello",10,60);
-  text("distance from closest sticker: " + min(distance), 10, 120);
-  text("my latitude: " + myLat, 10, 160);
-  text("my longitude: " + myLon, 10, 180);
+  text("Distance from closest sticker: " + floor(closestDistance*1000) + " metri", 10, 120);
+  text("My latitude: " + myLat, 10, 160);
+  text("My longitude: " + myLon, 10, 180);
   
-  text("refresh: " + i, 10, 200);
+  text("Refresh: " + i, 10, 200);
   
   push();
-  fill("#00aad1");
-  rect(0,250,50,50);
-  fill("#ff006e");
-  rect(350,250,50,50);
+  fill("#fe3031");
+  rect(0,250,70,50);
+  fill(lerpColor(color("#fe3031"),color("#4e33fd"),0.5))
+  rect(170,250,70,50);
+  fill("#4e33fd");
+  rect(330,250,70,50);
   pop();
+  
   push();
   fill(255);
-  ellipse(200,400,accuracy*3,accuracy*3);
+  ellipse(200,450,accuracy*2,accuracy*2);
   pop();
+  
   push();
   fill(0);
   textAlign(CENTER);
-  text(accuracy,200,400);
+  text(accuracy,200,455);
   pop();
+  
+  text("0 m", 20, 280);
+  text("10 m", 180, 280);
+  text("20 m", 350, 280);
 }
 
