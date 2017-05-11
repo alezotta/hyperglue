@@ -1,5 +1,5 @@
 var locationData;
-var myMessage="Hello";
+var myMessage="Hyperglue testing environment";
 var myColor;
 var distance=new Array();
 var latList= new Array(45.50416667,45.50388889,45.50388889,45.50388889,45.50361111,45.50361111,45.50305556,45.50305556,45.50305556,45.50305556);
@@ -11,6 +11,8 @@ var accuracy=0;
 //var stickerJSON = './assets/stickerJSON.json';
 //var stickerData = new Array();
 
+var mySound;
+var analyzer;
 
 /*= [
   {
@@ -41,7 +43,8 @@ var accuracy=0;
 function preload(){
     //import initial location data
     locationData = getCurrentPosition();
-    
+    //import tracks
+    mySong= loadSound('./assets/tracks/CoralMambo.mp3');
     
     
     //import sticker data
@@ -51,6 +54,19 @@ function preload(){
 
 function setup() {
   createCanvas(400,600);
+  
+  mySong.setVolume(0);
+  mySong.play();
+  mySong.loop();
+  
+  analyzer=new p5.Amplitude();
+  analyzer.setInput(mySong);
+  
+  
+  
+  
+  
+  
   
   //available properties of location data
    /* print(locationData.latitude);
@@ -100,6 +116,12 @@ function positionPing(position){
 
 function draw() {
   
+  var myVolume = analyzer.getLevel();
+  
+  
+  
+  console.log("my volume: " + myVolume)
+  
   colorMode(HSB);
 
   //azzurro #4e33fd
@@ -115,7 +137,7 @@ function draw() {
   fill(255);
   textSize(16);
   /*text(myMessage,10,60);*/
-  text("Hello",10,60);
+  text(myMessage,10,60);
   text("Distance from closest sticker: " + floor(closestDistance*1000) + " metri", 10, 120);
   text("My latitude: " + myLat, 10, 160);
   text("My longitude: " + myLon, 10, 180);

@@ -1,4 +1,4 @@
-/*! p5.sound.js v0.3.1 2016-09-29 */
+/*! p5.sound.js v0.3.3 2017-01-28 */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd)
     define('p5.sound', ['p5'], function (p5) { (factory(p5));});
@@ -92,13 +92,13 @@ sndcore = function () {
     }
     if (window.hasOwnProperty('webkitAudioContext') && !window.hasOwnProperty('AudioContext')) {
       window.AudioContext = webkitAudioContext;
-      if (!AudioContext.prototype.hasOwnProperty('createGain'))
+      if (typeof AudioContext.prototype.createGain !== 'function')
         AudioContext.prototype.createGain = AudioContext.prototype.createGainNode;
-      if (!AudioContext.prototype.hasOwnProperty('createDelay'))
+      if (typeof AudioContext.prototype.createDelay !== 'function')
         AudioContext.prototype.createDelay = AudioContext.prototype.createDelayNode;
-      if (!AudioContext.prototype.hasOwnProperty('createScriptProcessor'))
+      if (typeof AudioContext.prototype.createScriptProcessor !== 'function')
         AudioContext.prototype.createScriptProcessor = AudioContext.prototype.createJavaScriptNode;
-      if (!AudioContext.prototype.hasOwnProperty('createPeriodicWave'))
+      if (typeof AudioContext.prototype.createPeriodicWave !== 'function')
         AudioContext.prototype.createPeriodicWave = AudioContext.prototype.createWaveTable;
       AudioContext.prototype.internal_createGain = AudioContext.prototype.createGain;
       AudioContext.prototype.createGain = function () {
@@ -164,7 +164,7 @@ sndcore = function () {
         fixSetTarget(node.gain);
         return node;
       };
-      if (AudioContext.prototype.hasOwnProperty('createOscillator')) {
+      if (typeof AudioContext.prototype.createOscillator !== 'function') {
         AudioContext.prototype.internal_createOscillator = AudioContext.prototype.createOscillator;
         AudioContext.prototype.createOscillator = function () {
           var node = this.internal_createOscillator();
@@ -1522,8 +1522,8 @@ soundfile = function () {
     }
   };
   /**
-   * Move the playhead of the song to a position, in seconds. Start
-   * and Stop time. If none are given, will reset the file to play
+   * Move the playhead of the song to a position, in seconds. Start timing
+   * and playback duration. If none are given, will reset the file to play
    * entire duration from start to finish.
    *
    * @method jump
@@ -1538,11 +1538,11 @@ soundfile = function () {
       throw 'end time out of range';
     }
     var cTime = cueTime || 0;
-    var eTime = duration || this.buffer.duration - cueTime;
+    var dur = duration || this.buffer.duration - cueTime;
     if (this.isPlaying()) {
       this.stop();
     }
-    this.play(0, this.playbackRate, this.output.gain.value, cTime, eTime);
+    this.play(0, this.playbackRate, this.output.gain.value, cTime, dur);
   };
   /**
   * Return the number of channels in a sound file.
@@ -2888,6 +2888,99 @@ fft = function () {
     p5sound.soundArray.splice(index, 1);
     this.analyser.disconnect();
     this.analyser = undefined;
+  };
+  /**
+   *  Returns an array of average amplitude values for a given number
+   *  of frequency bands split equally. N defaults to 16.
+   *  <em>NOTE: analyze() must be called prior to linAverages(). Analyze()
+   *  tells the FFT to analyze frequency data, and linAverages() uses
+   *  the results to group them into a smaller set of averages.</em></p>
+   *  
+   *  @method  linAverages
+   *  @param  {Number}  N                Number of returned frequency groups 
+   *  @return {Array}   linearAverages   Array of average amplitude values for each group
+   */
+  p5.FFT.prototype.linAverages = function (N) {
+    var N = N || 16;
+    // This prevents undefined, null or 0 values of N
+    var spectrum = this.freqDomain;
+    var spectrumLength = spectrum.length;
+    var spectrumStep = Math.floor(spectrumLength / N);
+    var linearAverages = new Array(N);
+    // Keep a second index for the current average group and place the values accordingly
+    // with only one loop in the spectrum data
+    var groupIndex = 0;
+    for (var specIndex = 0; specIndex < spectrumLength; specIndex++) {
+      linearAverages[groupIndex] = linearAverages[groupIndex] !== undefined ? (linearAverages[groupIndex] + spectrum[specIndex]) / 2 : spectrum[specIndex];
+      // Increase the group index when the last element of the group is processed
+      if (specIndex % spectrumStep == spectrumStep - 1) {
+        groupIndex++;
+      }
+    }
+    return linearAverages;
+  };
+  /**
+   *  Returns an array of average amplitude values of the spectrum, for a given 
+   *  set of <a href="https://en.wikipedia.org/wiki/Octave_band" target="_blank">
+   *  Octave Bands</a>
+   *  <em>NOTE: analyze() must be called prior to logAverages(). Analyze()
+   *  tells the FFT to analyze frequency data, and logAverages() uses
+   *  the results to group them into a smaller set of averages.</em></p>
+   *  
+   *  @method  logAverages
+   *  @param  {Array}   octaveBands    Array of Octave Bands objects for grouping
+   *  @return {Array}   logAverages    Array of average amplitude values for each group
+   */
+  p5.FFT.prototype.logAverages = function (octaveBands) {
+    var nyquist = p5sound.audiocontext.sampleRate / 2;
+    var spectrum = this.freqDomain;
+    var spectrumLength = spectrum.length;
+    var logAverages = new Array(octaveBands.length);
+    // Keep a second index for the current average group and place the values accordingly
+    // With only one loop in the spectrum data
+    var octaveIndex = 0;
+    for (var specIndex = 0; specIndex < spectrumLength; specIndex++) {
+      var specIndexFrequency = Math.round(specIndex * nyquist / this.freqDomain.length);
+      // Increase the group index if the current frequency exceeds the limits of the band
+      if (specIndexFrequency > octaveBands[octaveIndex].hi) {
+        octaveIndex++;
+      }
+      logAverages[octaveIndex] = logAverages[octaveIndex] !== undefined ? (logAverages[octaveIndex] + spectrum[specIndex]) / 2 : spectrum[specIndex];
+    }
+    return logAverages;
+  };
+  /**
+   *  Calculates and Returns the 1/N
+   *  <a href="https://en.wikipedia.org/wiki/Octave_band" target="_blank">Octave Bands</a>
+   *  N defaults to 3 and minimum central frequency to 15.625Hz. 
+   *  (1/3 Octave Bands ~= 31 Frequency Bands)
+   *  Setting fCtr0 to a central value of a higher octave will ignore the lower bands
+   *  and produce less frequency groups.
+   * 
+   *  @method   getOctaveBands
+   *  @param  {Number}  N             Specifies the 1/N type of generated octave bands
+   *  @param  {Number}  fCtr0         Minimum central frequency for the lowest band
+   *  @return {Array}   octaveBands   Array of octave band objects with their bounds
+   */
+  p5.FFT.prototype.getOctaveBands = function (N, fCtr0) {
+    var N = N || 3;
+    // Default to 1/3 Octave Bands
+    var fCtr0 = fCtr0 || 15.625;
+    // Minimum central frequency, defaults to 15.625Hz 
+    var octaveBands = [];
+    var lastFrequencyBand = {
+      lo: fCtr0 / Math.pow(2, 1 / (2 * N)),
+      ctr: fCtr0,
+      hi: fCtr0 * Math.pow(2, 1 / (2 * N))
+    };
+    octaveBands.push(lastFrequencyBand);
+    var nyquist = p5sound.audiocontext.sampleRate / 2;
+    while (lastFrequencyBand.hi < nyquist) {
+      var newFrequencyBand = {};
+      newFrequencyBand.lo = lastFrequencyBand.hi, newFrequencyBand.ctr = lastFrequencyBand.ctr * Math.pow(2, 1 / N), newFrequencyBand.hi = newFrequencyBand.ctr * Math.pow(2, 1 / (2 * N)), octaveBands.push(newFrequencyBand);
+      lastFrequencyBand = newFrequencyBand;
+    }
+    return octaveBands;
   };
   // helper methods to convert type from float (dB) to int (0-255)
   var freqToFloat = function (fft) {
@@ -4430,7 +4523,7 @@ oscillator = function () {
       }
       // var detune = this.oscillator.frequency.value;
       this.oscillator = p5sound.audiocontext.createOscillator();
-      this.oscillator.frequency.exponentialRampToValueAtTime(Math.abs(freq), p5sound.audiocontext.currentTime);
+      this.oscillator.frequency.value = Math.abs(freq);
       this.oscillator.type = type;
       // this.oscillator.detune.value = detune;
       this.oscillator.connect(this.output);
@@ -4484,9 +4577,6 @@ oscillator = function () {
       var rampTime = rampTime || 0;
       var tFromNow = tFromNow || 0;
       var now = p5sound.audiocontext.currentTime;
-      var currentVol = this.output.gain.value;
-      this.output.gain.cancelScheduledValues(now);
-      this.output.gain.linearRampToValueAtTime(currentVol, now + tFromNow);
       this.output.gain.linearRampToValueAtTime(vol, now + tFromNow + rampTime);
     } else if (vol) {
       vol.connect(self.output.gain);
@@ -6387,9 +6477,9 @@ audioin = function () {
       } else {
         window.alert('This browser does not support AudioIn');
       }
-    } else if (typeof window.MediaStreamTrack.getSources === 'function') {
+    } else if (typeof window.MediaDevices.enumerateDevices === 'function') {
       // Chrome supports getSources to list inputs. Dev picks default
-      window.MediaStreamTrack.getSources(this._gotSources);
+      window.MediaDevices.enumerateDevices(this._gotSources);
     } else {
     }
     // add to soundArray so we can dispose on close
@@ -6933,10 +7023,11 @@ delay = function () {
    *  Delay is an echo effect. It processes an existing sound source,
    *  and outputs a delayed version of that sound. The p5.Delay can
    *  produce different effects depending on the delayTime, feedback,
-   *  filter, and type. In the example below, a feedback of 0.5 will
-   *  produce a looping delay that decreases in volume by
-   *  50% each repeat. A filter will cut out the high frequencies so
-   *  that the delay does not sound as piercing as the original source.
+   *  filter, and type. In the example below, a feedback of 0.5 (the
+   *  defaul value) will produce a looping delay that decreases in 
+   *  volume by 50% each repeat. A filter will cut out the high
+   *  frequencies so that the delay does not sound as piercing as the
+   *  original source.
    *  
    *  @class p5.Delay
    *  @constructor
@@ -7024,6 +7115,8 @@ delay = function () {
     // default routing
     this.setType(0);
     this._maxDelay = this.leftDelay.delayTime.maxValue;
+    // set initial feedback to 0.5
+    this.feedback(0.5);
     // add this p5.SoundFile to the soundArray
     p5sound.soundArray.push(this);
   };
@@ -7055,8 +7148,8 @@ delay = function () {
     src.connect(this.input);
     this.leftDelay.delayTime.setValueAtTime(delayTime, this.ac.currentTime);
     this.rightDelay.delayTime.setValueAtTime(delayTime, this.ac.currentTime);
-    this._leftGain.gain.setValueAtTime(feedback, this.ac.currentTime);
-    this._rightGain.gain.setValueAtTime(feedback, this.ac.currentTime);
+    this._leftGain.gain.value = feedback;
+    this._rightGain.gain.value = feedback;
     if (_filter) {
       this._leftFilter.freq(_filter);
       this._rightFilter.freq(_filter);
@@ -7086,24 +7179,28 @@ delay = function () {
    *  in a loop. The feedback amount determines how much signal to send each
    *  time through the loop. A feedback greater than 1.0 is not desirable because
    *  it will increase the overall output each time through the loop,
-   *  creating an infinite feedback loop.
+   *  creating an infinite feedback loop. The default value is 0.5
    *  
    *  @method  feedback
    *  @param {Number|Object} feedback 0.0 to 1.0, or an object such as an
    *                                  Oscillator that can be used to
    *                                  modulate this param
+   *  @returns {Number} Feedback value
+   *                                  
    */
   p5.Delay.prototype.feedback = function (f) {
     // if f is an audio node...
-    if (typeof f !== 'number') {
+    if (f && typeof f !== 'number') {
       f.connect(this._leftGain.gain);
       f.connect(this._rightGain.gain);
     } else if (f >= 1) {
       throw new Error('Feedback value will force a positive feedback loop.');
-    } else {
-      this._leftGain.gain.exponentialRampToValueAtTime(f, this.ac.currentTime);
-      this._rightGain.gain.exponentialRampToValueAtTime(f, this.ac.currentTime);
+    } else if (typeof f === 'number') {
+      this._leftGain.gain.value = f;
+      this._rightGain.gain.value = f;
     }
+    // return value of feedback
+    return this._leftGain.gain.value;
   };
   /**
    *  Set a lowpass filter frequency for the delay. A lowpass filter
