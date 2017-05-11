@@ -11,13 +11,28 @@ var accuracy = 0;
 var stickerJSON = './assets/stickerJSON.json';
 var stickerData = new Array();
 
-var mySong;
-var mySound;
-var analyzer;
+var stickerSong;
+var belizeSong;
+var polarbeerSong;
+var emptySong;
 
-var myVolume = 0;
+//var analyzer;
+
+var belizeVolume;
+var polarbeersVolume;
+var emptyVolume;
 
 var stickerAmount;
+
+
+var polarbeersSticker;
+var emptySticker;
+var belizeSticker;
+var posEmpty = 200;
+var posBelize = -200;
+var posPolarbeers = -200;
+
+var minDistance = 0.02;
 
 /*= [
   {
@@ -50,7 +65,9 @@ function preload(){
     stickerData = loadJSON(stickerJSON);
     
     //import music track 1
-    mySound = loadSound('./assets/tracks/Polarbeers.mp3');
+    polarbeersSong = loadSound('./assets/tracks/Polarbeers.mp3');
+    belizeSong = loadSound('./assets/tracks/Belize.mp3');
+    emptySong = loadSound('./assets/tracks/CoralMambo.mp3');
     
     //import all tracks
     /*for(var indexTrack = 0; indexTrack<stickerData.length; indexTrack++){
@@ -60,6 +77,11 @@ function preload(){
     
     //mySound = loadSound(stickerData[1].track);
     
+    //import sticker images
+    polarbeersSticker = loadImage('./assets/stickers/polarbeers.png');
+    belizeSticker = loadImage('./assets/stickers/belize.png');
+    emptySticker = loadImage('./assets/stickers/emptySticker.png');
+    
 }
 
 function setup() {
@@ -68,16 +90,18 @@ function setup() {
   //measures the number of stickers in the array
     stickerAmount = Object.keys(stickerData).length;
     
-  
-  
   //play all tracks
     /*for(var indexPlay = 0; indexPlay<stickerAmount; indexPlay++){
       mySound[indexPlay].play();
     }*/
     
-    myVolume = 0.05;
+    belizeVolume = 0.05;
+    polarbeersVolume = 0.05;
+    emptyVolume = 0.05;
     
-    mySound.play();
+    belizeSong.play();
+    polarbeersSong.play();
+    emptySong.play();
 
   //magic code for sound
   /*analyzer=new p5.Amplitude();
@@ -97,6 +121,7 @@ function setup() {
   
   //update my location data every 5 seconds
   intervalCurrentPosition(positionPing, 5000);
+  
 }
 
 function positionPing(position){
@@ -113,32 +138,70 @@ function positionPing(position){
     myLat = position.latitude;
     myLon = position.longitude;
     accuracy = position.accuracy;
+    
+    minDistance = 0.02;
+    
+    //belize 45.50388889, 9.16611111
+    //polarbeers 
+    
   
     for(var index=0; index<stickerAmount; index++) {
     
       //calcola distanza tra due punti, restituisce valore distanza
-      distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, myLat, myLon, 'km');
+      distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, stickerData[0].lat, stickerData[0].lon, 'km');
     	
     	//check the calculation of distances of my current position from all locations
     	console.log("Latitude of Sticker " + index + ": " + stickerData[index].lat);
     	console.log("Longitude of Sticker " + index + ": " + stickerData[index].lon);
       console.log("Distance from sticker " + index + ": " + distance[index] + " km");
       
+      if(distance[index]<minDistance){
+        minDistance = distance[index];
+        stickerName = stickerData[index].name;
+        
+        if(stickerName == "Belize"){
+          belizeVolume = 1-(distance[index]*50);
+          posBelize = 220;
+          posEmpty = -200;
+        } else if(stickerName == "Polarbeers"){
+          polarbeersVolume = 1-(distance[index]*50);
+          posPolarbeers = 200;
+          posEmpty = -200;
+        } else {
+          
+          emptyVolume = 0.05;
+          belizeVolume = 0;
+          polarbeersVolume = 0;
+          
+          posEmpty = 200;
+          posBelize = -200;
+          posPolarbeers = -200;
+          
+        }
+        
+      }
+      
+      
+      
+      
       //check if there is a sticker in the range of 20 m
-      if(min(distance)<0.02){
+      /*if(min(distance)<0.02){
         //set volume of track[index] based on distance
         //0.02*50=1
         myVolume = 1-(min(distance)*50);
       }else{
         //imposta volume al minimo
         myVolume = 0.05;
-      }
+      }*/
     }
 }
 
 function draw() {
  
-  mySound.setVolume(myVolume);
+  belizeSong.setVolume(belizeVolume);
+  polarbeersSong.setVolume(polarbeersVolume);
+  emptySong.setVolume(emptyVolume);
+
   
   /*console.log("Il volume " + stickerData[0].name + " è : " + stickerData[0].myVolume);
   console.log("Il volume " + stickerData[1].name + " è : " + stickerData[1].myVolume);
@@ -157,43 +220,71 @@ function draw() {
   
   //interface
   background(myColor);
-  
   noStroke();
   fill(255);
-  textSize(16);
-  text(myMessage,10,60);
-  text("Distance from closest sticker: " + floor(closestDistance*1000) + " metri", 10, 120);
-  text("My latitude: " + myLat, 10, 160);
-  text("My longitude: " + myLon, 10, 180);
-  
-  text("Refresh: " + i, 10, 200);
-  
-  text("Volume: " + floor(myVolume)*100 + " %", 10, 220);
   
   push();
-  fill("#fe3031");
-  rect(0,250,70,50);
-  fill(lerpColor(color("#fe3031"),color("#4e33fd"),0.5))
-  rect(170,250,70,50);
-  fill("#4e33fd");
-  rect(330,250,70,50);
+    textSize(24);
+    text(myMessage,10,40);
   pop();
   
   push();
-  fill(255);
-  rectMode(CENTER);
-  rect(200,450,accuracy,20);
+    translate(0,-40);
+    textSize(14);
+    text("Distance from closest sticker: " + floor(closestDistance*1000) + " metri", 10, 120);
+    text("My latitude: " + myLat, 10, 160);
+    text("My longitude: " + myLon, 10, 180);
+    
+    text("Update number " + i, 10, 200);
+    
+    text("Volume: " + floor(polarbeersVolume)*100 + " %", 10, 220);
+    
+    text("You are listening to", 10, 260);
+  
   pop();
   
   push();
-  fill(255);
-  textAlign(CENTER);
-  text("Accuracy of signal",200,430);
-  fill('#4e33fd');
-  text(accuracy,200,455);
+    translate(0,100);
+    
+    push();
+      translate(0,80);
+      fill("#fe3031");
+      rect(0,290,70,50);
+      fill(lerpColor(color("#fe3031"),color("#4e33fd"),0.5))
+      rect(170,290,70,50);
+      fill("#4e33fd");
+      rect(330,290,70,50);
+    pop();
+    
+    push();
+      textSize(14);
+      translate(0,80);
+      text("Litmus paper",10,280);
+      text("0 m", 20, 320);
+      text("10 m", 180, 320);
+      text("20 m", 350, 320);
+    pop();
+    
+    push();
+      translate(0,20);
+      fill(255);
+      rectMode(CENTER);
+      rect(200,450,accuracy,20);
+    pop();
+    
+    push();
+      fill(255);
+      translate(0,20);
+      textAlign(CENTER);
+      text("Accuracy of signal",200,430);
+      fill('#4e33fd');
+      text(accuracy,200,455);
+    pop();
   pop();
   
-  text("0 m", 20, 280);
-  text("10 m", 180, 280);
-  text("20 m", 350, 280);
+imageMode(CENTER);
+image(emptySticker,posEmpty,330);  
+image(belizeSticker,posBelize,200);
+image(polarbeersSticker,posPolarbeers,390);
+
 }
