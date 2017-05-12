@@ -54,8 +54,8 @@ function preload(){
     console.log(stickerData);
     
     //import music track 1
-    polarbeersSong = loadSound('./assets/tracks/polarbeers.mp3');
-    belizeSong = loadSound('./assets/tracks/belize.mp3');
+    polarbeersSong = loadSound('./assets/tracks/polarbeers_track.mp3');
+    belizeSong = loadSound('./assets/tracks/belize_track.mp3');
     coralSong = loadSound('./assets/tracks/coral.mp3');
     patmSong = loadSound('./assets/tracks/patm.mp3');
     ndgroundSong = loadSound('./assets/tracks/2nd_ground.mp3');
@@ -71,9 +71,9 @@ function preload(){
     
     //import sticker images
     polarbeersSticker = loadImage('./assets/stickers/polarbeers.png');
-    belizeSticker = loadImage('./assets/stickers/belize.png');
+    belizeSticker = loadImage('./assets/stickers/belize_sticker.png');
     coralSticker = loadImage('./assets/stickers/coral.png');
-    patmSticker = loadImage('./assets/stickers/patm.png');
+    patmSticker = loadImage('./assets/stickers/patm_sticker.png');
     ndgroundSticker = loadImage('./assets/stickers/2nd_ground.png');
     emptySticker = loadImage('./assets/stickers/empty.png');
     
