@@ -1,6 +1,8 @@
 var locationData;
 var myMessage = "HYPERGLUE _ testing environment";
 var myColor;
+
+
 var distance = new Array();
 var myLat;
 var myLon;
@@ -52,11 +54,11 @@ function preload(){
     stickerData = loadJSON(stickerJSON);
     
     //import music track 1
-    polarbeersSong = loadSound('./assets/tracks/polarbeers_track.mp3');
-    belizeSong = loadSound('./assets/tracks/belize_track.mp3');
-    coralSong = loadSound('./assets/tracks/coral.mp3');
-    patmSong = loadSound('./assets/tracks/patm.mp3');
-    ndgroundSong = loadSound('./assets/tracks/2nd_ground.mp3');
+    polarbeersSong = loadSound('./assets/tracks/polarbeers_mixdown.mp3');
+    belizeSong = loadSound('./assets/tracks/belize_mixdown.mp3');
+    coralSong = loadSound('./assets/tracks/coral_mixdown.mp3');
+    patmSong = loadSound('./assets/tracks/patm_mixdown.mp3');
+    ndgroundSong = loadSound('./assets/tracks/2nd_ground_mixdown.mp3');
     emptySong = loadSound('./assets/tracks/empty.mp3');
     
     //import sticker images
@@ -70,7 +72,8 @@ function preload(){
 }
 
 function setup() {
-  createCanvas(400,600);
+  createCanvas(windowWidth,windowHeight);
+ 
   
   //measures the number of stickers in the array
     stickerAmount = Object.keys(stickerData).length;
@@ -147,7 +150,7 @@ function positionPing(position){
     for(var index=0; index<stickerAmount; index++) {
     
       //calcola distanza tra due punti, restituisce valore distanza
-      distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, myLat, myLon, 'km');
+      distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, stickerData[6].lat, stickerData[6].lon, 'km');
     	
     	
     	
@@ -230,7 +233,9 @@ function draw() {
   console.log("Il volume di Patm è : " + patmVolume);
   console.log("Il volume di 2nd Ground è : " + ndgroundVolume);
   
+  
   colorMode(HSB);
+ 
 
   //azzurro #4e33fd
   //rosso #fe3031
@@ -329,3 +334,4 @@ push();
 pop();
 
 }
+
