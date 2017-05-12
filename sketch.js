@@ -56,7 +56,7 @@ function preload(){
     belizeSong = loadSound('./assets/tracks/Belize.mp3');
     coralSong = loadSound('./assets/tracks/CoralMambo.mp3');
     patmSong = loadSound('./assets/tracks/Patm.mp3');
-    ndgroundSong = loadSound('./assets/tracks/2ndground.mp3');
+    ndgroundSong = loadSound('./assets/tracks/2nd_ground.mp3');
     emptySong = loadSound('./assets/tracks/empty.mp3');
     
     //import all tracks
