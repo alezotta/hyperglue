@@ -54,11 +54,11 @@ function preload(){
     stickerData = loadJSON(stickerJSON);
     
     //import music track 1
-    polarbeersSong = loadSound('./assets/tracks/polarbeersmixdown.mp3');
-    belizeSong = loadSound('./assets/tracks/belizemixdown.mp3');
-    coralSong = loadSound('./assets/tracks/coralmixdown.mp3');
-    patmSong = loadSound('./assets/tracks/patmmixdown.mp3');
-    ndgroundSong = loadSound('./assets/tracks/2nd_groundmixdown.mp3');
+    polarbeersSong = loadSound('./assets/tracks/polarbeers_track.mp3');
+    belizeSong = loadSound('./assets/tracks/belize_track.mp3');
+    coralSong = loadSound('./assets/tracks/coral.mp3');
+    patmSong = loadSound('./assets/tracks/patm.mp3');
+    ndgroundSong = loadSound('./assets/tracks/2nd_ground.mp3');
     emptySong = loadSound('./assets/tracks/empty.mp3');
     
     //import sticker images
@@ -150,7 +150,7 @@ function positionPing(position){
     for(var index=0; index<stickerAmount; index++) {
     
       //calcola distanza tra due punti, restituisce valore distanza
-      distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, stickerData[6].lat, stickerData[6].lon, 'km');
+      distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, myLat, myLon, 'km');
     	
     	
     	
