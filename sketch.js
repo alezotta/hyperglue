@@ -156,7 +156,7 @@ function positionPing(position){
     for(var index=0; index<stickerAmount; index++) {
     
       //calcola distanza tra due punti, restituisce valore distanza
-      distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, stickerData[9].lat, stickerData[9].lon, 'km');
+      distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, myLat, myLon, 'km');
     	
     	//check the calculation of distances of my current position from all locations
     /*	console.log("Latitude of Sticker " + index + ": " + stickerData[index].lat);
