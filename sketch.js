@@ -94,11 +94,11 @@ function setup() {
     ndgroundSong.play();
     emptySong.play();
     
-   /* belizeSong.loop();
+    /*belizeSong.loop();
     polarbeersSong.loop();
     coralSong.loop();
     patmSong.loop();
-    ndgroundSong.loop();
+    
     emptySong.loop();*/
 
   //magic code for sound
@@ -133,11 +133,12 @@ function positionPing(position){
     
     i++;
     
+    
     myLat = position.latitude;
     myLon = position.longitude;
     accuracy = position.accuracy;
     
-    minDistance = 0.02;
+    //minDistance = 0.02;
     
     //belize 45.50388889, 9.16611111
     //45.503810, 9.165454
@@ -146,7 +147,9 @@ function positionPing(position){
     for(var index=0; index<stickerAmount; index++) {
     
       //calcola distanza tra due punti, restituisce valore distanza
-      distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, 45.503774, 9.165212, 'km');
+      distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, myLat, myLon, 'km');
+    	
+    	
     	
     	//check the calculation of distances of my current position from all locations
       /*console.log("Latitude of Sticker " + index + ": " + stickerData[index].lat);
@@ -321,8 +324,8 @@ push();
   image(belizeSticker,posBelize,200);
   image(polarbeersSticker,posPolarbeers,390);
   image(coralSticker,posCoral,300);
-  image(patmSticker,posPatm,300);
-  image(ndgroundSticker,posNdground,300);
+  image(patmSticker,posPatm,350);
+  image(ndgroundSticker,posNdground,340);
 pop();
 
 }
