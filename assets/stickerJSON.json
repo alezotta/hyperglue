@@ -1,26 +1,62 @@
 [
 	{
-		"name": "Belize",
-		"lat": "45.503888889999999",
-		"lon": "9.1661111099999992",
-		"track": "./assets/tracks/Belize.mp3",
-		"stickerImage": "./assets/stickers/Belize.png",
-		"myVolume": "0.05"
+		"name": "Polarbeers",
+		"lat": "45.503611110000001",
+		"lon": "9.1619444399999992"
 	},
 	{
 		"name": "Polarbeers",
-		"lat": "45.503611110000001",
-		"lon": "9.1644444400000005",
-		"track": "./assets/tracks/Polarbeers.mp3",
-		"stickerImage": "./assets/stickers/polarbeers.png",
-		"myVolume": "0.05"
+		"lat": "45.503888889999999",
+		"lon": "9.1627777800000008"
+	},
+	{
+		"name": "2nd Ground",
+		"lat": "45.504166669999996",
+		"lon": "9.1638888900000008"
 	},
 	{
 		"name": "Coral Mambo",
-		"lat": "45.50305556",
-		"lon": "9.1613888899999996",
-		"track": "./assets/tracks/CoralMambo.mp3",
-		"stickerImage": "./assets/stickers/coral_mambo.png",
-		"myVolume": "0.05"
+		"lat": "45.503611110000001",
+		"lon": "9.1636111199999997"
+	},
+	{
+		"name": "Patm",
+		"lat": "45.503333329999996",
+		"lon": "9.1636111099999998"
+	},
+	{
+		"name": "2nd Ground",
+		"lat": "45.503333319999997",
+		"lon": "9.1636111000000"
+	},
+	{
+		"name": "2nd Ground",
+		"lat": "45.503611120000002",
+		"lon": "9.1644444500000004"
+	},
+	{
+		"name": "Polarbeers",
+		"lat": "45.503611100000003",
+		"lon": "9.1644444300000006"
+	},
+	{
+		"name": "Patm",
+		"lat": "45.503611110000001",
+		"lon": "9.1644444400000005"
+	},
+	{
+		"name": "2nd Ground",
+		"lat": "45.503611120000004",
+		"lon": "9.1652777900000003"
+	},
+	{
+		"name": "Belize",
+		"lat": "45.503888869999997",
+		"lon": "9.1661111099999992"
+	},
+	{
+		"name": "2nd Ground",
+		"lat": "45.503888889999999",
+		"lon": "9.1658333299999999"
 	}
 ]

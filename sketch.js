@@ -51,6 +51,8 @@ function preload(){
     //import all data
     stickerData = loadJSON(stickerJSON);
     
+    console.log(stickerData);
+    
     //import music track 1
     polarbeersSong = loadSound('./assets/tracks/polarbeers.mp3');
     belizeSong = loadSound('./assets/tracks/belize.mp3');
@@ -101,6 +103,13 @@ function setup() {
     patmSong.play();
     ndgroundSong.play();
     emptySong.play();
+    
+   /* belizeSong.loop();
+    polarbeersSong.loop();
+    coralSong.loop();
+    patmSong.loop();
+    ndgroundSong.loop();
+    emptySong.loop();*/
 
   //magic code for sound
   /*analyzer=new p5.Amplitude();
@@ -147,7 +156,7 @@ function positionPing(position){
     for(var index=0; index<stickerAmount; index++) {
     
       //calcola distanza tra due punti, restituisce valore distanza
-      distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, stickerData[0].lat, stickerData[0].lon, 'km');
+      distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, stickerData[9].lat, stickerData[9].lon, 'km');
     	
     	//check the calculation of distances of my current position from all locations
     /*	console.log("Latitude of Sticker " + index + ": " + stickerData[index].lat);
@@ -230,14 +239,14 @@ function draw() {
   //azzurro #4e33fd
   //rosso #fe3031
   
-  var closestDistance = min(distance);
+  //var closestDistance = min(distance);
   
   //find color inside given spectrum based on distance of closest sticker
   //0.02*50=1
-  myColor= lerpColor(color("#fe3031"),color("#4e33fd"),closestDistance*50);
+  //myColor= lerpColor(color("#fe3031"),color("#4e33fd"),closestDistance*50);
   
   //interface
-  background(myColor);
+  background("#4e33fd");
   noStroke();
   fill(255);
   
@@ -249,19 +258,19 @@ function draw() {
   push();
     translate(0,-40);
     textSize(14);
-    text("Distance from closest sticker: " + floor(closestDistance*1000) + " metri", 10, 120);
+    //text("Distance from closest sticker: " + floor(closestDistance*1000) + " metri", 10, 120);
     text("My latitude: " + myLat, 10, 160);
     text("My longitude: " + myLon, 10, 180);
     
-    text("Update number " + i, 10, 200);
+    /*text("Update number " + i, 10, 200);
     
-    text("Volume: " + floor(polarbeersVolume)*100 + " %", 10, 220);
+    text("Volume: " + floor(polarbeersVolume)*100 + " %", 10, 220);*/
     
-    text("You are listening to", 10, 260);
+    text("You are listening to", 10, 220);
   
   pop();
   
-  push();
+  /*push();
     translate(0,100);
     
     push();
@@ -298,14 +307,14 @@ function draw() {
       fill('#4e33fd');
       text(accuracy,200,455);
     pop();
-  pop();
+  pop();*/
   
 imageMode(CENTER);
 image(emptySticker,posEmpty,330);  
 image(belizeSticker,posBelize,200);
 image(polarbeersSticker,posPolarbeers,390);
-image(coralSticker,posCoral,390);
-image(patmSticker,posPatm,390);
-image(ndgroundSticker,posNdground,390);
+image(coralSticker,posCoral,300);
+image(patmSticker,posPatm,300);
+image(ndgroundSticker,posNdground,300);
 
 }
