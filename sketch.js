@@ -2,8 +2,6 @@ var locationData;
 var myMessage = "Hyperglue testing environment";
 var myColor;
 var distance = new Array();
-//var latList = new Array(45.50416667,45.50388889,45.50388889,45.50388889,45.50361111,45.50361111,45.50305556,45.50305556,45.50305556,45.50305556);
-//var lonList = new Array(9.16583333,9.16555556,9.16611111,9.16527778,9.16527778,9.16444444,9.16138889,9.16166667,9.16194444,9.16222222);
 var myLat;
 var myLon;
 var i = 0;
@@ -11,51 +9,40 @@ var accuracy = 0;
 var stickerJSON = './assets/stickerJSON.json';
 var stickerData = new Array();
 
-var stickerSong;
+//tracks
 var belizeSong;
 var polarbeerSong;
+var coralSong;
+var patmSong;
+var ndgroundSong;
 var emptySong;
 
-//var analyzer;
-
+//volumes
 var belizeVolume;
 var polarbeersVolume;
+var coralVolume;
+var patmVolume;
+var ndgroundVolume;
 var emptyVolume;
 
-var stickerAmount;
-
-
-var polarbeersSticker;
-var emptySticker;
+//stickers image
 var belizeSticker;
+var polarbeersSticker;
+var coralSticker;
+var patmSticker;
+var ndgroundSticker;
+var emptySticker;
+
+//stickers position
 var posEmpty = 200;
 var posBelize = -200;
 var posPolarbeers = -200;
+var posCoral = -200;
+var posPatm = -200;
+var posNdground = -200;
 
+var stickerAmount;
 var minDistance = 0.02;
-
-/*= [
-  {
-    name : 'giovanni',
-    track: './assets/track-di-giovanni.mp3',
-    stickerImage: './assets/eccetera.jpg',
-    latitude: 45,
-    longitude: 9
-  },
-  {
-    name : 'giovanni',
-    track: './assets/track-di-giovanni.mp3',
-    stickerImage: '.assets/eccetera',
-    latitude: 45,
-    longitude: 9
-  },{
-    name : 'giovanni',
-    track: './assets/track-di-giovanni.mp3',
-    stickerImage: '.assets/eccetera',
-    latitude: 45,
-    longitude: 9
-  }
-]*/
 
 function preload(){
     //import initial location data
@@ -67,7 +54,10 @@ function preload(){
     //import music track 1
     polarbeersSong = loadSound('./assets/tracks/Polarbeers.mp3');
     belizeSong = loadSound('./assets/tracks/Belize.mp3');
-    emptySong = loadSound('./assets/tracks/CoralMambo.mp3');
+    coralSong = loadSound('./assets/tracks/CoralMambo.mp3');
+    patmSong = loadSound('./assets/tracks/Patm.mp3');
+    ndgroundSong = loadSound('./assets/tracks/2ndground.mp3');
+    emptySong = loadSound('./assets/tracks/empty.mp3');
     
     //import all tracks
     /*for(var indexTrack = 0; indexTrack<stickerData.length; indexTrack++){
@@ -80,7 +70,10 @@ function preload(){
     //import sticker images
     polarbeersSticker = loadImage('./assets/stickers/polarbeers.png');
     belizeSticker = loadImage('./assets/stickers/belize.png');
-    emptySticker = loadImage('./assets/stickers/emptySticker.png');
+    coralSticker = loadImage('./assets/stickers/coral.png');
+    patmSticker = loadImage('./assets/stickers/patm.png');
+    ndgroundSticker = loadImage('./assets/stickers/ndground.png');
+    emptySticker = loadImage('./assets/stickers/empty.png');
     
 }
 
@@ -97,10 +90,16 @@ function setup() {
     
     belizeVolume = 0.05;
     polarbeersVolume = 0.05;
+    coralVolume = 0.05;
+    patmVolume = 0.05;
+    ndgroundVolume = 0.05;
     emptyVolume = 0.05;
     
     belizeSong.play();
     polarbeersSong.play();
+    coralSong.play();
+    patmSong.play();
+    ndgroundSong.play();
     emptySong.play();
 
   //magic code for sound
@@ -151,9 +150,9 @@ function positionPing(position){
       distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, stickerData[0].lat, stickerData[0].lon, 'km');
     	
     	//check the calculation of distances of my current position from all locations
-    	console.log("Latitude of Sticker " + index + ": " + stickerData[index].lat);
+    /*	console.log("Latitude of Sticker " + index + ": " + stickerData[index].lat);
     	console.log("Longitude of Sticker " + index + ": " + stickerData[index].lon);
-      console.log("Distance from sticker " + index + ": " + distance[index] + " km");
+      console.log("Distance from sticker " + index + ": " + distance[index] + " km");*/
       
       if(distance[index]<minDistance){
         minDistance = distance[index];
@@ -167,21 +166,37 @@ function positionPing(position){
           polarbeersVolume = 1-(distance[index]*50);
           posPolarbeers = 200;
           posEmpty = -200;
+        } else if(stickerName == "Coral Mambo"){
+          coralVolume = 1-(distance[index]*50);
+          posCoral = 200;
+          posEmpty = -200;
+        } else if(stickerName == "Patm"){
+          patmVolume = 1-(distance[index]*50);
+          posPatm = 200;
+          posEmpty = -200;
+        } else if(stickerName == "2nd Ground"){
+          ndgroundVolume = 1-(distance[index]*50);
+          posNdground = 200;
+          posEmpty = -200;
         } else {
           
           emptyVolume = 0.05;
           belizeVolume = 0;
           polarbeersVolume = 0;
+          coralVolume = 0;
+          posPatm = 0;
+          ndgroundVolume = 0;
           
           posEmpty = 200;
           posBelize = -200;
           posPolarbeers = -200;
+          posCoral = -200;
+          posPatm = -200;
+          posNdground = -200;
           
         }
         
       }
-      
-      
       
       
       //check if there is a sticker in the range of 20 m
@@ -200,6 +215,9 @@ function draw() {
  
   belizeSong.setVolume(belizeVolume);
   polarbeersSong.setVolume(polarbeersVolume);
+  coralSong.setVolume(coralVolume);
+  patmSong.setVolume(patmVolume);
+  ndgroundSong.setVolume(ndgroundVolume);
   emptySong.setVolume(emptyVolume);
 
   
@@ -286,5 +304,8 @@ imageMode(CENTER);
 image(emptySticker,posEmpty,330);  
 image(belizeSticker,posBelize,200);
 image(polarbeersSticker,posPolarbeers,390);
+image(coralSticker,posCoral,390);
+image(patmSticker,posPatm,390);
+image(ndgroundSticker,posNdground,390);
 
 }
