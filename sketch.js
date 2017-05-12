@@ -52,10 +52,10 @@ function preload(){
     stickerData = loadJSON(stickerJSON);
     
     //import music track 1
-    polarbeersSong = loadSound('./assets/tracks/Polarbeers.mp3');
-    belizeSong = loadSound('./assets/tracks/Belize.mp3');
-    coralSong = loadSound('./assets/tracks/CoralMambo.mp3');
-    patmSong = loadSound('./assets/tracks/Patm.mp3');
+    polarbeersSong = loadSound('./assets/tracks/polarbeers.mp3');
+    belizeSong = loadSound('./assets/tracks/belize.mp3');
+    coralSong = loadSound('./assets/tracks/coral.mp3');
+    patmSong = loadSound('./assets/tracks/patm.mp3');
     ndgroundSong = loadSound('./assets/tracks/2nd_ground.mp3');
     emptySong = loadSound('./assets/tracks/empty.mp3');
     
@@ -72,7 +72,7 @@ function preload(){
     belizeSticker = loadImage('./assets/stickers/belize.png');
     coralSticker = loadImage('./assets/stickers/coral.png');
     patmSticker = loadImage('./assets/stickers/patm.png');
-    ndgroundSticker = loadImage('./assets/stickers/ndground.png');
+    ndgroundSticker = loadImage('./assets/stickers/2nd_ground.png');
     emptySticker = loadImage('./assets/stickers/empty.png');
     
 }
