@@ -1,5 +1,5 @@
 var locationData;
-var myMessage = "Hyperglue testing environment";
+var myMessage = "HYPERGLUE _ testing environment";
 var myColor;
 var distance = new Array();
 var myLat;
@@ -51,8 +51,6 @@ function preload(){
     //import all data
     stickerData = loadJSON(stickerJSON);
     
-    console.log(stickerData);
-    
     //import music track 1
     polarbeersSong = loadSound('./assets/tracks/polarbeers_track.mp3');
     belizeSong = loadSound('./assets/tracks/belize_track.mp3');
@@ -60,14 +58,6 @@ function preload(){
     patmSong = loadSound('./assets/tracks/patm.mp3');
     ndgroundSong = loadSound('./assets/tracks/2nd_ground.mp3');
     emptySong = loadSound('./assets/tracks/empty.mp3');
-    
-    //import all tracks
-    /*for(var indexTrack = 0; indexTrack<stickerData.length; indexTrack++){
-          //load all tracks 
-          mySound = loadSound(stickerData[indexTrack].track);
-    }*/
-    
-    //mySound = loadSound(stickerData[1].track);
     
     //import sticker images
     polarbeersSticker = loadImage('./assets/stickers/polarbeers.png');
@@ -127,8 +117,8 @@ function setup() {
     myLon = locationData.longitude;
     accuracy = locationData.accuracy;
   
-  //update my location data every 5 seconds
-  intervalCurrentPosition(positionPing, 5000);
+  //update my location data every 4 seconds
+  intervalCurrentPosition(positionPing, 4000);
   
 }
 
@@ -150,21 +140,23 @@ function positionPing(position){
     minDistance = 0.02;
     
     //belize 45.50388889, 9.16611111
-    //polarbeers 
+    //45.503810, 9.165454
+    //myLat, myLon
     
-  
     for(var index=0; index<stickerAmount; index++) {
     
       //calcola distanza tra due punti, restituisce valore distanza
-      distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, myLat, myLon, 'km');
+      distance[index] = calcGeoDistance(stickerData[index].lat, stickerData[index].lon, 45.503774, 9.165212, 'km');
     	
     	//check the calculation of distances of my current position from all locations
-    /*	console.log("Latitude of Sticker " + index + ": " + stickerData[index].lat);
-    	console.log("Longitude of Sticker " + index + ": " + stickerData[index].lon);
-      console.log("Distance from sticker " + index + ": " + distance[index] + " km");*/
+      /*console.log("Latitude of Sticker " + index + ": " + stickerData[index].lat);
+    	console.log("Longitude of Sticker " + index + ": " + stickerData[index].lon);*/
+      /*console.log("Distance from sticker " + index + ": " + distance[index] + " km");
+      console.log("distanza minima " + index + " : " + minDistance);*/
       
-      if(distance[index]<minDistance){
-        minDistance = distance[index];
+      if(distance[index]<0.02){
+        //minDistance = distance[index];
+        
         stickerName = stickerData[index].name;
         
         if(stickerName == "Belize"){
@@ -229,10 +221,11 @@ function draw() {
   ndgroundSong.setVolume(ndgroundVolume);
   emptySong.setVolume(emptyVolume);
 
-  
-  /*console.log("Il volume " + stickerData[0].name + " è : " + stickerData[0].myVolume);
-  console.log("Il volume " + stickerData[1].name + " è : " + stickerData[1].myVolume);
-  console.log("Il volume " + stickerData[2].name + " è : " + stickerData[2].myVolume);*/
+  console.log("Il volume di Belize è : " + belizeVolume);
+  console.log("Il volume di Polarbeers è : " + polarbeersVolume);
+  console.log("Il volume di Coral è : " + coralVolume);
+  console.log("Il volume di Patm è : " + patmVolume);
+  console.log("Il volume di 2nd Ground è : " + ndgroundVolume);
   
   colorMode(HSB);
 
@@ -251,22 +244,34 @@ function draw() {
   fill(255);
   
   push();
-    textSize(24);
+    textFont("VT323");
+    textSize(30);
     text(myMessage,10,40);
   pop();
   
   push();
-    translate(0,-40);
     textSize(14);
+    text("Console", 10, 80);
+    
+    translate(0,30);
+    
     //text("Distance from closest sticker: " + floor(closestDistance*1000) + " metri", 10, 120);
-    text("My latitude: " + myLat, 10, 160);
-    text("My longitude: " + myLon, 10, 180);
+    text("My latitude: " + myLat, 10, 80);
+    text("My longitude: " + myLon, 10, 100);
     
-    /*text("Update number " + i, 10, 200);
+    text("Update number " + i, 10, 130);
     
-    text("Volume: " + floor(polarbeersVolume)*100 + " %", 10, 220);*/
+    text("You are listening to", 10, 160);
     
-    text("You are listening to", 10, 220);
+    push();
+      translate(20,190);
+      text("Polarbeers: " + polarbeersVolume*100 + " %", 10, 0);
+      text("Belize: " + belizeVolume*100 + " %", 10, 20);
+      text("Coral: " + coralVolume*100 + " %", 10, 40);
+      text("2nd Ground: " + ndgroundVolume*100 + " %", 10, 60);
+      text("Patm: " + patmVolume*100 + " %", 10, 80);
+    pop();
+   
   
   pop();
   
@@ -308,13 +313,16 @@ function draw() {
       text(accuracy,200,455);
     pop();
   pop();*/
-  
-imageMode(CENTER);
-image(emptySticker,posEmpty,330);  
-image(belizeSticker,posBelize,200);
-image(polarbeersSticker,posPolarbeers,390);
-image(coralSticker,posCoral,300);
-image(patmSticker,posPatm,300);
-image(ndgroundSticker,posNdground,300);
+
+push();
+  translate(0,100);
+  imageMode(CENTER);
+  image(emptySticker,posEmpty,330);  
+  image(belizeSticker,posBelize,200);
+  image(polarbeersSticker,posPolarbeers,390);
+  image(coralSticker,posCoral,300);
+  image(patmSticker,posPatm,300);
+  image(ndgroundSticker,posNdground,300);
+pop();
 
 }
