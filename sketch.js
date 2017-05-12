@@ -54,11 +54,11 @@ function preload(){
     stickerData = loadJSON(stickerJSON);
     
     //import music track 1
-    polarbeersSong = loadSound('./assets/tracks/polarbeers_mixdown.mp3');
-    belizeSong = loadSound('./assets/tracks/belize_mixdown.mp3');
-    coralSong = loadSound('./assets/tracks/coral_mixdown.mp3');
-    patmSong = loadSound('./assets/tracks/patm_mixdown.mp3');
-    ndgroundSong = loadSound('./assets/tracks/2nd_ground_mixdown.mp3');
+    polarbeersSong = loadSound('./assets/tracks/polarbeersmixdown.mp3');
+    belizeSong = loadSound('./assets/tracks/belizemixdown.mp3');
+    coralSong = loadSound('./assets/tracks/coralmixdown.mp3');
+    patmSong = loadSound('./assets/tracks/patmmixdown.mp3');
+    ndgroundSong = loadSound('./assets/tracks/2nd_groundmixdown.mp3');
     emptySong = loadSound('./assets/tracks/empty.mp3');
     
     //import sticker images
