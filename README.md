@@ -2,7 +2,8 @@
 
 ### Sound-Augmented-Reality experience.
 Stickers let bands share the same stage. Get out on the street and just listen.  
-https://alezotta.github.io/hyperglue/
+https://alezotta.github.io/hyperglue/  
+*(This prototype requires a GPS-enabled device, battery and to be located at **45°30'13.5"N 9°09'49.1"E** on Planet Earth)*
 
 ### Data Walk Workshop by Yanni Loukissas
 Georgia Tech Local Data Design Lab | School of Design, Politecnico di Milano  
