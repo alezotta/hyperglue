@@ -1,17 +1,17 @@
 # HYPERGLUE
 
-### Stickers let bands share the same stage. Get out on the street and just listen.
 ### Sound-Augmented-Reality experience.
+Stickers let bands share the same stage. Get out on the street and just listen.  
+https://alezotta.github.io/hyperglue/
 
-## Data Walk Workshop by Yanni Loukissas
-Georgia Tech Local Data Design Lab | Dipartimento di Design, Politecnico di Milano
+### Data Walk Workshop by Yanni Loukissas
+Georgia Tech Local Data Design Lab | School of Design, Politecnico di Milano  
 May 8-12, 2017
 
 # Description 
 
-The road between the station and the campus is one that is traversed many times by many people every day.
 ## 1
-As a students’ passage road, many of them use this street as a place to stick their identity and projects through stickers placed on walls, poles and other elements of the street. We set out to explore this part of Bovisa’s identity by mapping the stickers placed on the roads around the campus. We tagged them by place, by category and by surface that they were sticked on.
+The road between the station and the campus is one that is traversed many times by many people every day. As a students’ passage road, many of them use this street as a place to stick their identity and projects through stickers placed on walls, poles and other elements of the street. We set out to explore this part of Bovisa’s identity by mapping the stickers placed on the roads around the campus. We tagged them by place, by category and by surface that they were sticked on.
 We also decided to focus on one peculiar aspects of the stickers: their ability to link different places and dimensions, eventually erasing distance by spreading a message where the sticker is placed.
 ## 2
 For our data walk, we decided to zoom into the dataset that we built during our research, allowing users to zoom on the bands’ stickers and on individual bands.
@@ -21,14 +21,10 @@ Starting from our data walk, we designed an app that functions as the core exper
 The app could be expanded as a means for independent bands to connect with people in a more local way, where bands place their stickers and augment the reality around them with sounds and tracks.
 
 ### Project by
-Valeria Sonia Aufiero
-valeria.aufiero@gmail.com
-Andrea Benedetti
-benedetti.a93@gmail.com
-Simone Costagliola
-simo.costagliola@gmail.com
-Alessandro Zotta
-zotta.ale@gmail.com
+Valeria Sonia Aufiero — valeria.aufiero@gmail.com  
+Andrea Benedetti — benedetti.a93@gmail.com  
+Simone Costagliola — simo.costagliola@gmail.com  
+Alessandro Zotta — hello@alessandrozotta.it
 
 ### Code by
 Alessandro Zotta
